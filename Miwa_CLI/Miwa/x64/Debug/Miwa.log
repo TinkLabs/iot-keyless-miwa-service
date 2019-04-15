@@ -1,0 +1,4 @@
+﻿  stdafx.cpp
+  Miwa.cpp
+c:\users\user\documents\github\miwa\miwa_cli\miwa\miwa.cpp(68): warning C4172: returning address of local variable or temporary: result
+  Miwa.vcxproj -> C:\Users\user\Documents\GitHub\Miwa\Miwa_CLI\x64\Debug\Miwa.exe
