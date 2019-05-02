@@ -4,7 +4,7 @@ services:
     build:
       context: "."
       dockerfile: ./Dockerfile
-    image: hi.com/iot-miwa
+    image: hi.com/iot-miwa-service
     container_name: miwa
     ports:
       - 3010:3010
