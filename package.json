@@ -2,14 +2,16 @@
   "name": "miwa_service",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-		"start": "node app",
+    "start": "node app",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@sentry/node": "^5.0.8",
+    "dotenv": "^7.0.0",
     "bluebird": "^3.5.1",
     "dateformat": "^3.0.3",
     "express": "^4.16.3",

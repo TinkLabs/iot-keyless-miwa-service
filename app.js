@@ -4,8 +4,16 @@ var Promise = require('bluebird');
 var validator = require('validator');
 var empty = require('is-empty');
 var dateFormat = require('dateformat');
+let dotenv = require('dotenv');
+dotenv.config('./.env');
 
 var app = express();
+
+var Sentry = require('@sentry/node');
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  environment: process.env.NODE_ENV,
+});
 
 app.get('/', function (req, res) {
   const getAsync = Promise.promisify(cmd.get, { multiArgs: true, context: cmd })
@@ -27,130 +35,130 @@ app.get('/', function (req, res) {
   var assoRoom4 = empty(req.query.assoRoom4) ? "0" : req.query.assoRoom4;
   var assoRoom5 = empty(req.query.assoRoom5) ? "0" : req.query.assoRoom5;
 
-  if(empty(hotelCode) || !validator.isHexadecimal(hotelCode) || !validator.isLength(hotelCode, {min: 8, max:8})){
+  if (empty(hotelCode) || !validator.isHexadecimal(hotelCode) || !validator.isLength(hotelCode, { min: 8, max: 8 })) {
     res.statusCode = 403;
     res.send('Parameters not match');
     return;
   }
 
-  if(empty(hotelSecret) || !validator.isLength(hotelSecret, {min: 14, max: 14})){
+  if (empty(hotelSecret) || !validator.isLength(hotelSecret, { min: 14, max: 14 })) {
     res.statusCode = 403;
     res.send('Please enter correct hotel secret');
     return;
   }
 
-  if(empty(cardType) || !validator.isLength(cardType, {min: 3, max: 3})){
+  if (empty(cardType) || !validator.isLength(cardType, { min: 3, max: 3 })) {
     res.statusCode = 403;
     res.send('Please enter correct cardType');
     return;
   }
 
-  if(empty(issueNumber) || !validator.isInt(issueNumber, {min: 1, max: 255})){
+  if (empty(issueNumber) || !validator.isInt(issueNumber, { min: 1, max: 255 })) {
     res.statusCode = 403;
     res.send('Please enter correct issueNumber');
     return;
-  }else{
+  } else {
     issueNumber = issueNumber.padStart(3, "0");
   }
 
-  if(empty(numOfCardIssue) || !validator.isInt(numOfCardIssue, {min: 1, max: 255})){
+  if (empty(numOfCardIssue) || !validator.isInt(numOfCardIssue, { min: 1, max: 255 })) {
     res.statusCode = 403;
     res.send('Please enter correct numOfCardIssue');
     return;
-  }else{
+  } else {
     numOfCardIssue = issueNumber.padStart(3, "0");
   }
 
-  if(empty(checkInDate) || !validator.isISO8601(checkInDate)){
+  if (empty(checkInDate) || !validator.isISO8601(checkInDate)) {
     res.statusCode = 405;
     res.send('Please enter correct checkInDate');
     return;
-  }else{
+  } else {
     var date = new Date(checkInDate);
     var timeZoneOffset = date.getTimezoneOffset() * 60000;
     date = new Date(date.getTime() + timeZoneOffset);
     checkInDate = dateFormat(date, "yymmddHHMM");
   }
 
-  if(empty(checkOutDate) || !validator.isISO8601(checkOutDate)){
+  if (empty(checkOutDate) || !validator.isISO8601(checkOutDate)) {
     res.statusCode = 403;
     res.send('Please enter correct checkOutDate');
     return;
-  }else{
+  } else {
     var date = new Date(checkOutDate);
     var timeZoneOffset = date.getTimezoneOffset() * 60000;
     date = new Date(date.getTime() + timeZoneOffset);
     checkOutDate = dateFormat(date, "yymmddHH");
   }
 
-  if(empty(mainRoomNo) || !validator.isInt(mainRoomNo, {min: 0, max: 999999})){
+  if (empty(mainRoomNo) || !validator.isInt(mainRoomNo, { min: 0, max: 999999 })) {
     res.statusCode = 403;
     res.send('Please enter correct mainRoomNo');
     return;
-  }else{
+  } else {
     mainRoomNo = mainRoomNo.padStart(6, "0")
   }
 
-  if(!validator.isInt(assoRoom1, {min: 0, max: 999999})){
+  if (!validator.isInt(assoRoom1, { min: 0, max: 999999 })) {
     res.statusCode = 403;
     res.send('Please enter correct assoRoom1');
     return;
-  }else{
+  } else {
     assoRoom1 = assoRoom1.padStart(6, "0")
   }
 
-  if(!validator.isInt(assoRoom2, {min: 0, max: 999999})){
+  if (!validator.isInt(assoRoom2, { min: 0, max: 999999 })) {
     res.statusCode = 403;
     res.send('Please enter correct assoRoom2');
     return;
-  }else{
+  } else {
     assoRoom2 = assoRoom2.padStart(6, "0")
   }
 
-  if(!validator.isInt(assoRoom3, {min: 0, max: 999999})){
+  if (!validator.isInt(assoRoom3, { min: 0, max: 999999 })) {
     res.statusCode = 403;
     res.send('Please enter correct assoRoom3');
     return;
-  }else{
+  } else {
     assoRoom3 = assoRoom3.padStart(6, "0")
   }
 
-  if(!validator.isInt(assoRoom4, {min: 0, max: 999999})){
+  if (!validator.isInt(assoRoom4, { min: 0, max: 999999 })) {
     res.statusCode = 403;
     res.send('Please enter correct assoRoom4');
     return;
-  }else{
+  } else {
     assoRoom4 = assoRoom4.padStart(6, "0")
   }
 
-  if(!validator.isInt(assoRoom5, {min: 0, max: 999999})){
+  if (!validator.isInt(assoRoom5, { min: 0, max: 999999 })) {
     res.statusCode = 403;
     res.send('Please enter correct assoRoom5');
     return;
-  }else{
+  } else {
     assoRoom5 = assoRoom5.padStart(6, "0")
   }
 
-  var pInf =  cardType +
-              issueNumber +
-              numOfCardIssue +
-              ',' +
-              checkInDate +
-              ',' +
-              checkOutDate +
-              ',' +
-              summerTimeFlag +
-              shutOutFlag +
-              buzzerFlag +
-              deadboltOverrideFlag +
-              ',' +
-              mainRoomNo +
-              ',' +
-              assoRoom1 +
-              assoRoom2 +
-              assoRoom3 +
-              assoRoom4 +
-              assoRoom5;
+  var pInf = cardType +
+    issueNumber +
+    numOfCardIssue +
+    ',' +
+    checkInDate +
+    ',' +
+    checkOutDate +
+    ',' +
+    summerTimeFlag +
+    shutOutFlag +
+    buzzerFlag +
+    deadboltOverrideFlag +
+    ',' +
+    mainRoomNo +
+    ',' +
+    assoRoom1 +
+    assoRoom2 +
+    assoRoom3 +
+    assoRoom4 +
+    assoRoom5;
 
   var command_miwa = 'Miwa ' + hotelCode + ' ' + hotelSecret + ' ' + pInf + ' ' + '00000000';
   console.log(command_miwa);
@@ -161,6 +169,11 @@ app.get('/', function (req, res) {
   }).catch(err => {
     res.send(data);
   })
+});
+
+app.use(Sentry.Handlers.errorHandler());
+app.use((err, req, res, next) => {
+  res.status(500).end(`${res.sentry}\n`);
 });
 
 app.listen(3010, function () {
