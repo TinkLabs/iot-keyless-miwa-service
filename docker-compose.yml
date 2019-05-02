@@ -1,0 +1,11 @@
+version: "3.1"
+services:
+  api:
+    build:
+      context: "."
+      dockerfile: ./Dockerfile
+    image: hi.com/iot-keyless-miwa-service
+    container_name: miwa
+    ports:
+      - 3010:3010
+
